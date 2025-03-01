@@ -1,0 +1,15 @@
+{
+    "name": "Claude Code CLI",
+    "id": "claude-code",
+    "version": "1.0.0",
+    "description": "Installs the Claude Code CLI globally",
+    "options": {},
+    "dependsOn": {
+        "ghcr.io/devcontainers/features/node": {
+            "version": "latest"
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/node"
+    ]
+}
