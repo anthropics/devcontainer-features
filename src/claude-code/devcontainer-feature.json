@@ -4,6 +4,8 @@
     "version": "1.0.0",
     "description": "Installs the Claude Code CLI globally",
     "options": {},
+    "documentationURL": "https://github.com/anthropics/devcontainer-features/tree/main/src/claude-code",
+    "licenseURL": "https://github.com/anthropics/devcontainer-features/blob/main/LICENSE",
     "dependsOn": {
         "ghcr.io/devcontainers/features/node": {
             "version": "latest"

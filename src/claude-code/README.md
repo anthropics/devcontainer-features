@@ -6,7 +6,7 @@ This feature installs the [Claude Code CLI](https://github.com/anthropics/claude
 
 ```json
 "features": {
-    "ghcr.io/username/feature-repo/claude-code:1.0": {}
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
 }
 ```
 
