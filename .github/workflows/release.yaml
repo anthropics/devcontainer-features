@@ -19,6 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Login to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
       - name: "Publish Features"
         uses: devcontainers/action@v1
         with:
