@@ -2,12 +2,15 @@ name: "Release Dev Container Features"
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'src/**'
       - '.github/workflows/release.yaml'
 
 jobs:
   deploy:
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
       packages: write
