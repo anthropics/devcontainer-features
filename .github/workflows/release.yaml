@@ -2,15 +2,12 @@ name: "Release Dev Container Features"
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'src/**'
       - '.github/workflows/release.yaml'
 
 jobs:
   deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -26,13 +23,15 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
           
-      - name: Set GitHub token for repository tagging
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+      # Set GITHUB_TOKEN as env var for devcontainer feature publish
+      - name: Configure environment
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: echo "GITHUB_TOKEN is configured"
 
       - name: "Publish Features"
         uses: devcontainers/action@v1
         with:
           publish-features: "true"
           base-path-to-features: "./src"
+          github-token: ${{secrets.GITHUB_TOKEN}}
