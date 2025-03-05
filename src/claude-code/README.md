@@ -1,12 +1,12 @@
 # Claude Code CLI
 
-This feature installs the [Claude Code CLI](https://github.com/anthropics/claude-code-cli) globally.
+This feature installs the [Claude Code CLI](https://github.com/anthropics/claude-code-cli) globally for use in development containers.
 
 ## Example Usage
 
 ```json
 "features": {
-    "ghcr.io/username/feature-repo/claude-code:1.0": {}
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
 }
 ```
 

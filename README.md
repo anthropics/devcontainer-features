@@ -1,6 +1,6 @@
-# Claude Code Dev Container Feature
+# Dev Container Features
 
-This repository contains a [Dev Container Feature](https://containers.dev/implementors/features/) that installs the Claude Code CLI.
+This repository contains [Dev Container Features](https://containers.dev/implementors/features/), including one that installs the Claude Code CLI.
 
 ## Contents
 
@@ -13,7 +13,7 @@ To use this feature in your devcontainer, add it to your `devcontainer.json` fil
 
 ```json
 "features": {
-    "ghcr.io/username/feature-repo/claude-code:1.0": {}
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
 }
 ```
 
@@ -30,7 +30,7 @@ You can build and test the feature using the [dev container CLI](https://github.
 devcontainer features test -f claude-code .
 
 # Publish the feature
-devcontainer feature publish -n username/feature-repo .
+devcontainer feature publish -n anthropics/devcontainer-features .
 ```
 
 ## License
