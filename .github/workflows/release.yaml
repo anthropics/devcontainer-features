@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - main
+      - deploy-permission
+  workflow_dispatch:
 
 jobs:
   deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/deploy-permission' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
