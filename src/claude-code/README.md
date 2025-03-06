@@ -1,23 +1,24 @@
-# Claude Code CLI
 
-This feature installs the [Claude Code CLI](https://github.com/anthropics/claude-code-cli) globally for use in development containers.
+# Claude Code CLI (claude-code)
+
+Installs the Claude Code CLI globally
 
 ## Example Usage
 
 ```json
 "features": {
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
 }
 ```
 
-## Requirements
+## Options
 
-This feature depends on the [Node.js feature](https://github.com/devcontainers/features/tree/main/src/node) and will automatically install it if not already present.
+| Options Id | Description | Type | Default Value |
+|-----|-----|-----|-----|
 
-## Customization
 
-This feature has no customizable options.
 
-## License
 
-This feature is provided under the terms of the MIT license.
+---
+
+_Note: This file was auto-generated from the [devcontainer-feature.json](https://github.com/anthropics/devcontainer-features/blob/main/src/claude-code/devcontainer-feature.json).  Add additional notes to a `NOTES.md`._
