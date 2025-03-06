@@ -49,7 +49,7 @@ if command -v node >/dev/null && command -v npm >/dev/null; then
         exit 1
     fi
 else
-    echo "ERROR: Could not install or find Node.js and npm. Claude Code CLI installation skipped."
-    # Exit with success for testing purposes
-    exit 0
+    echo "ERROR: Could not install or find Node.js and npm. Claude Code CLI installation failed."
+    # Exit with error
+    exit 1
 fi
