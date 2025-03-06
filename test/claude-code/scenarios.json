@@ -5,11 +5,5 @@
             "ghcr.io/devcontainers/features/node:1": {},
             "claude-code": {}
         }
-    },
-    "with-node": {
-        "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
-        "features": {
-            "claude-code": {}
-        }
     }
 }
