@@ -3,7 +3,6 @@
 ## Requirements
 
 This feature requires Node.js and npm to be available in the container. You need to either:
-
 1. Use a base container image that includes Node.js, or
 2. Add the Node.js feature to your devcontainer.json
 
