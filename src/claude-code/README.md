@@ -4,9 +4,13 @@ This feature installs the [Claude Code CLI](https://github.com/anthropics/claude
 
 ## Requirements
 
-This feature requires Node.js and npm to be available in the container. You need to either:
+This feature requires Node.js and npm to be available in the container. You can:
+
 1. Use a base container image that includes Node.js, or
-2. Add the Node.js feature to your devcontainer.json
+2. Add the Node.js feature to your devcontainer.json, or
+3. Let this feature attempt to install Node.js automatically (best-effort, works on Debian/Ubuntu, Alpine, Fedora, RHEL, and CentOS)
+
+Note: When auto-installing Node.js, a compatible LTS version (Node.js 18.x) will be used.
 
 ## Example Usage
 

@@ -9,8 +9,14 @@ if ! command -v node >/dev/null || ! command -v npm >/dev/null; then
     
     # Only attempt installation in certain environments
     if command -v apt-get >/dev/null; then
-        # Debian/Ubuntu - most likely to work
-        apt-get update && apt-get install -y nodejs npm && echo "Successfully installed Node.js and npm"
+        # Debian/Ubuntu - install more recent Node.js LTS
+        apt-get update
+        apt-get install -y ca-certificates curl gnupg
+        mkdir -p /etc/apt/keyrings
+        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+        apt-get update
+        apt-get install -y nodejs && echo "Successfully installed Node.js and npm"
     elif command -v apk >/dev/null; then
         # Alpine
         apk add --no-cache nodejs npm && echo "Successfully installed Node.js and npm"
@@ -19,7 +25,8 @@ if ! command -v node >/dev/null || ! command -v npm >/dev/null; then
         dnf install -y nodejs npm && echo "Successfully installed Node.js and npm"
     elif command -v yum >/dev/null; then
         # CentOS/RHEL
-        yum install -y nodejs npm && echo "Successfully installed Node.js and npm"
+        curl -sL https://rpm.nodesource.com/setup_18.x | bash -
+        yum install -y nodejs && echo "Successfully installed Node.js and npm"
     else
         # If we can't install Node.js, show the error message but continue
         echo "ERROR: Node.js and npm are required but not found!"
@@ -30,7 +37,7 @@ if ! command -v node >/dev/null || ! command -v npm >/dev/null; then
         echo "    \"ghcr.io/anthropics/devcontainer-features/claude-code:1\": {}"
         echo "  }"
         echo ""
-        echo "Continuing anyway for testing purposes..."
+        exit 1
     fi
 fi
 
