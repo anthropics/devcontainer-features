@@ -38,3 +38,4 @@ jobs:
           publish-features: "true"
           base-path-to-features: "./src"
           github-token: ${{secrets.GITHUB_TOKEN}}
+          features-visibility: "public"
