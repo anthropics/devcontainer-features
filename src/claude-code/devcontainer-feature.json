@@ -1,7 +1,7 @@
 {
     "name": "Claude Code CLI",
     "id": "claude-code",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Installs the Claude Code CLI globally",
     "options": {},
     "documentationURL": "https://github.com/anthropics/devcontainer-features/tree/main/src/claude-code",
