@@ -5,5 +5,17 @@
             "ghcr.io/devcontainers/features/node:1": {},
             "claude-code": {}
         }
+    },
+    "with-firewall": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
+            "claude-code": {}
+        },
+        "runArgs": [
+            "--cap-add=NET_ADMIN",
+            "--cap-add=NET_RAW"
+        ],
+        "postCreateCommand": "sudo /usr/local/bin/init-firewall.sh"
     }
 }
