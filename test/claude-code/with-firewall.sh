@@ -20,26 +20,6 @@ if [ ! -x /usr/local/bin/init-firewall.sh ]; then
     exit 1
 fi
 
-echo "Testing network connectivity with firewall..."
-
-# Check if firewall is actually running
-if ! iptables -L | grep -q "Chain INPUT"; then
-    echo "WARNING: iptables rules don't appear to be set up properly"
-    echo "Current iptables rules:"
-    iptables -L
-    echo "--------------------"
-    echo "Attempting to run firewall script now..."
-    sudo /usr/local/bin/init-firewall.sh
-fi
-
-# Verify ipset is configured
-if ! ipset list | grep -q "Name: allowed-domains"; then
-    echo "WARNING: ipset allowed-domains doesn't appear to be configured"
-    echo "Current ipsets:"
-    ipset list
-    echo "--------------------"
-fi
-
 # Check if we can reach GitHub API (should be allowed)
 if curl --connect-timeout 5 https://api.github.com/zen >/dev/null 2>&1; then
     check "can reach GitHub API" true
