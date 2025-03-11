@@ -126,14 +126,18 @@ setup_firewall_script() {
     
     cat <<EOF
 
-Firewall script installed at $script_path
-IMPORTANT: Add this to your devcontainer.json:
+Optional network firewall script installed at $script_path
+
+To enable the firewall, add these to your devcontainer.json:
 
   "runArgs": [
     "--cap-add=NET_ADMIN",
     "--cap-add=NET_RAW"
   ],
   "postCreateCommand": "sudo $script_path"
+
+The firewall restricts outbound connections to only essential services
+like GitHub, npm registry, and the Anthropic API.
 
 EOF
 }
@@ -171,18 +175,15 @@ EOF
 
 # Main script starts here
 main() {
-    ENABLE_FIREWALL=${ENABLEFIREWALL:-"false"}
     echo "Activating feature 'claude-code'"
 
     # Detect package manager
     PKG_MANAGER=$(detect_package_manager)
     echo "Detected package manager: $PKG_MANAGER"
 
-    # Install firewall packages if enabled
-    if [ "${ENABLE_FIREWALL}" = "true" ]; then
-        echo "Firewall will be enabled. Installing required packages..."
-        install_firewall_packages "$PKG_MANAGER" || echo "Firewall package installation failed, but continuing..."
-    fi
+    # Install firewall packages (always install but don't activate)
+    echo "Installing optional firewall packages..."
+    install_firewall_packages "$PKG_MANAGER" || echo "Firewall package installation failed, but continuing..."
 
     # Try to install Node.js if it's not available
     if ! command -v node >/dev/null || ! command -v npm >/dev/null; then
@@ -193,10 +194,8 @@ main() {
     # Install Claude Code CLI
     install_claude_code || exit 1
 
-    # Set up firewall script if enabled
-    if [ "${ENABLE_FIREWALL}" = "true" ]; then
-        setup_firewall_script
-    fi
+    # Always set up the firewall script, but don't execute it
+    setup_firewall_script
 }
 
 # Execute main function

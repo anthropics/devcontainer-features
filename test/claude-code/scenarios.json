@@ -10,9 +10,7 @@
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
             "ghcr.io/devcontainers/features/node:1": {},
-            "claude-code": {
-                "enableFirewall": true
-            }
+            "claude-code": {}
         },
         "runArgs": [
             "--cap-add=NET_ADMIN",

@@ -37,20 +37,9 @@ When using with containers that have nvm pre-installed, you can use the Claude C
 
 ## Optional Network Firewall
 
-This feature can optionally set up a network firewall that restricts outbound traffic to only essential services (GitHub, npm registry, Anthropic API, etc.). This improves security by limiting the container's network access.
+This feature includes a network firewall script that you can optionally enable to restrict outbound traffic to only essential services (GitHub, npm registry, Anthropic API, etc.). This improves security by limiting the container's network access.
 
-To enable the firewall:
-
-```json
-"features": {
-    "ghcr.io/devcontainers/features/node:1": {},
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {
-        "enableFirewall": true
-    }
-}
-```
-
-You'll also need to add the following to your devcontainer.json:
+The firewall script is installed but not enabled by default. To enable the firewall, add these to your devcontainer.json:
 
 ```json
 "runArgs": [
@@ -69,3 +58,14 @@ The firewall will be initialized when the container starts, blocking all outboun
 - Statsig services
 
 All other outbound connections will be blocked, providing an additional layer of security for your development environment.
+
+### How the Firewall Works
+
+The firewall uses iptables and ipset to:
+
+1. Create a whitelist of allowed domains and IP addresses
+2. Allow all established connections and responses
+3. Allow outbound DNS and SSH
+4. Block all other outbound connections
+
+The script automatically resolves and adds the IP addresses for essential services to the whitelist. If you need to add additional domains to the allowed list, you can modify the firewall script at `/usr/local/bin/init-firewall.sh`.
