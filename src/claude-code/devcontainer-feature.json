@@ -1,9 +1,15 @@
 {
     "name": "Claude Code CLI",
     "id": "claude-code",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Installs the Claude Code CLI globally",
-    "options": {},
+    "options": {
+        "enableFirewall": {
+            "type": "boolean",
+            "default": false,
+            "description": "Enable network firewall to restrict outbound connections to only essential services"
+        }
+    },
     "documentationURL": "https://github.com/anthropics/devcontainer-features/tree/main/src/claude-code",
     "licenseURL": "https://github.com/anthropics/devcontainer-features/blob/main/LICENSE",
     "customizations": {
@@ -15,5 +21,6 @@
     },
     "installsAfter": [
         "ghcr.io/devcontainers/features/node"
-    ]
+    ],
+    "capAdd": ["NET_ADMIN", "NET_RAW"]
 }

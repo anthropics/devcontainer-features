@@ -3,8 +3,12 @@
 ## Requirements
 
 This feature requires Node.js and npm to be available in the container. You need to either:
+
 1. Use a base container image that includes Node.js, or
 2. Add the Node.js feature to your devcontainer.json
+3. Let this feature attempt to install Node.js automatically (best-effort, works on Debian/Ubuntu, Alpine, Fedora, RHEL, and CentOS)
+
+Note: When auto-installing Node.js, a compatible LTS version (Node.js 18.x) will be used.
 
 ## Recommended configuration
 
@@ -30,3 +34,38 @@ If your container already has Node.js installed (for example, a container based 
 ## Using with nvm
 
 When using with containers that have nvm pre-installed, you can use the Claude Code feature directly, and it will use the existing Node.js installation.
+
+## Optional Network Firewall
+
+This feature can optionally set up a network firewall that restricts outbound traffic to only essential services (GitHub, npm registry, Anthropic API, etc.). This improves security by limiting the container's network access.
+
+To enable the firewall:
+
+```json
+"features": {
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {
+        "enableFirewall": true
+    }
+}
+```
+
+You'll also need to add the following to your devcontainer.json:
+
+```json
+"runArgs": [
+    "--cap-add=NET_ADMIN",
+    "--cap-add=NET_RAW"
+],
+"postCreateCommand": "sudo /usr/local/bin/init-firewall.sh"
+```
+
+The firewall will be initialized when the container starts, blocking all outbound connections except to essential services. The allowed services include:
+
+- GitHub API, Git, and Web services
+- npm registry
+- Anthropic API
+- Sentry.io
+- Statsig services
+
+All other outbound connections will be blocked, providing an additional layer of security for your development environment.
