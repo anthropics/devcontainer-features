@@ -4,11 +4,12 @@ on:
   push:
     branches:
       - main
+      - add-firewall-feature
   workflow_dispatch:
 
 jobs:
   deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/add-firewall-feature' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
