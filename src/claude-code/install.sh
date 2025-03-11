@@ -92,9 +92,9 @@ get_firewall_packages() {
     local pkg_manager="$1"
     
     case "$pkg_manager" in
-        apt) echo "iptables ipset dnsutils jq curl" ;;
-        apk) echo "iptables ipset bind-tools jq curl" ;;
-        dnf|yum) echo "iptables ipset bind-utils jq curl" ;;
+        apt) echo "iptables ipset dnsutils jq curl aggregate" ;;
+        apk) echo "iptables ipset bind-tools jq curl aggregate" ;;
+        dnf|yum) echo "iptables ipset bind-utils jq curl aggregate" ;;
         *) echo "" ;;
     esac
 }
