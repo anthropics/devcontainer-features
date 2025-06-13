@@ -35,37 +35,3 @@ If your container already has Node.js installed (for example, a container based 
 
 When using with containers that have nvm pre-installed, you can use the Claude Code feature directly, and it will use the existing Node.js installation.
 
-## Optional Network Firewall
-
-This feature includes a network firewall script that you can optionally enable to restrict outbound traffic to only essential services (GitHub, npm registry, Anthropic API, etc.). This improves security by limiting the container's network access.
-
-The firewall script is installed but not enabled by default. To enable the firewall, add these to your devcontainer.json:
-
-```json
-"runArgs": [
-    "--cap-add=NET_ADMIN",
-    "--cap-add=NET_RAW"
-],
-"postCreateCommand": "sudo /usr/local/bin/init-firewall.sh"
-```
-
-The firewall will be initialized when the container starts, blocking all outbound connections except to essential services. The allowed services include:
-
-- GitHub API, Git, and Web services
-- npm registry
-- Anthropic API
-- Sentry.io
-- Statsig services
-
-All other outbound connections will be blocked, providing an additional layer of security for your development environment.
-
-### How the Firewall Works
-
-The firewall uses iptables and ipset to:
-
-1. Create a whitelist of allowed domains and IP addresses
-2. Allow all established connections and responses
-3. Allow outbound DNS and SSH
-4. Block all other outbound connections
-
-The script automatically resolves and adds the IP addresses for essential services to the whitelist. If you need to add additional domains to the allowed list, you can modify the firewall script at `/usr/local/bin/init-firewall.sh`.
