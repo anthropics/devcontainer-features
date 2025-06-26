@@ -11,10 +11,23 @@ Installs the Claude Code CLI globally
 }
 ```
 
+### Installing as a user (recommended for non-root containers)
+
+If you run your devcontainer as a non-root user (e.g., `vscode` user), use the `installAsUser` option to prevent permission issues with auto-updates:
+
+```json
+"features": {
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {
+        "installAsUser": true
+    }
+}
+```
+
 ## Options
 
 | Options Id | Description | Type | Default Value |
 |-----|-----|-----|-----|
+| installAsUser | Install Claude Code locally for the current user instead of globally. This prevents permission issues with auto-updates when running as a non-root user. | boolean | false |
 
 
 ## Customizations
@@ -59,6 +72,19 @@ If your container already has Node.js installed (for example, a container based 
 ## Using with nvm
 
 When using with containers that have nvm pre-installed, you can use the Claude Code feature directly, and it will use the existing Node.js installation.
+
+## User Installation vs Global Installation
+
+### Global Installation (default)
+- Installs Claude Code system-wide
+- Requires root permissions for updates
+- May cause permission issues when running as non-root user
+
+### User Installation (`installAsUser: true`)
+- Installs Claude Code to `~/.local/bin`
+- Allows updates without root permissions
+- Recommended when running devcontainers as non-root users
+- Automatically configures PATH in shell profiles
 
 
 

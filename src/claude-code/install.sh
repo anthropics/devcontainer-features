@@ -89,9 +89,46 @@ install_nodejs() {
 
 # Function to install Claude Code CLI
 install_claude_code() {
-    echo "Installing Claude Code CLI..."
-    npm install -g @anthropic-ai/claude-code
+    local install_as_user="$1"
+    
+    if [ "$install_as_user" = "true" ]; then
+        echo "Installing Claude Code CLI for current user..."
+        
+        # Set npm to install to user directory
+        export NPM_CONFIG_PREFIX="$HOME/.local"
+        mkdir -p "$HOME/.local/bin"
+        
+        # Install globally but to user directory
+        npm install -g @anthropic-ai/claude-code
+        
+        # Add user bin directory to PATH
+        if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+            export PATH="$HOME/.local/bin:$PATH"
+            echo "Added $HOME/.local/bin to PATH"
+        fi
+        
+        # Create a script to ensure PATH is set for the user
+        cat > "$HOME/.bashrc_claude" << 'EOF'
+# Add user-local npm packages to PATH
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+EOF
+        
+        # Source the script in common shell configs
+        for config_file in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile"; do
+            if [ -f "$config_file" ] && ! grep -q "source.*\.bashrc_claude" "$config_file"; then
+                echo "source ~/.bashrc_claude" >> "$config_file"
+                echo "Added Claude Code PATH setup to $config_file"
+            fi
+        done
+        
+    else
+        echo "Installing Claude Code CLI globally..."
+        npm install -g @anthropic-ai/claude-code
+    fi
 
+    # Check if claude command is available
     if command -v claude >/dev/null; then
         echo "Claude Code CLI installed successfully!"
         claude --version
@@ -121,6 +158,10 @@ EOF
 # Main script starts here
 main() {
     echo "Activating feature 'claude-code'"
+    
+    # Read the installAsUser option (default: false)
+    local install_as_user="${INSTALLASUSER:-false}"
+    echo "Install as user: $install_as_user"
 
     # Detect package manager
     PKG_MANAGER=$(detect_package_manager)
@@ -133,7 +174,7 @@ main() {
     fi
 
     # Install Claude Code CLI
-    install_claude_code || exit 1
+    install_claude_code "$install_as_user" || exit 1
 }
 
 # Execute main function
