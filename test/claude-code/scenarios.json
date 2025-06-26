@@ -5,5 +5,14 @@
             "ghcr.io/devcontainers/features/node:1": {},
             "claude-code": {}
         }
+    },
+    "user_install": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
+            "claude-code": {
+                "installAsUser": true
+            }
+        }
     }
 }
