@@ -1,0 +1,20 @@
+{
+    "name": "Claude Code CLI Mounts",
+    "id": "claude-code-mounts",
+    "version": "1.0.5",
+    "description": "Mounts the directories and files required for Claude Code",
+    "options": {},
+    "documentationURL": "https://github.com/anthropics/devcontainer-features/tree/main/src/claude-code",
+    "licenseURL": "https://github.com/anthropics/devcontainer-features/blob/main/LICENSE",
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/node:1",
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1"
+    ],
+    "mounts": [
+        "source=${localEnv:HOME}/.claude/CLAUDE.md,target=/home/vscode/.claude/CLAUDE.md,type=bind,ro",
+        "source=${localEnv:HOME}/.claude/settings.json,target=/home/vscode/.claude/settings.json,type=bind,ro",
+        "source=${localEnv:HOME}/.claude/agents,target=/home/vscode/.claude/agents,type=bind,ro",
+        "source=${localEnv:HOME}/.claude/commands,target=/home/vscode/.claude/commands,type=bind,ro",
+        "source=${localEnv:HOME}/.claude/hooks,target=/home/vscode/.claude/hooks,type=bind,ro"
+    ]
+}

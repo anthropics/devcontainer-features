@@ -11,9 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
+      fail-fast: false
       matrix:
         features:
           - claude-code
+          - claude-code-mounts
         baseImage:
           - debian:latest
           - ubuntu:latest
@@ -23,6 +25,15 @@ jobs:
 
       - name: "Install latest devcontainer CLI"
         run: npm install -g @devcontainers/cli
+
+      - name: "Create test prerequisites"
+        run: |
+          mkdir -p ~/.claude/agents
+          mkdir -p ~/.claude/commands
+          mkdir -p ~/.claude/hooks
+          touch ~/.claude/settings.json
+          touch ~/.claude/CLAUDE.md
+
 
       - name: "Generating tests for '${{ matrix.features }}' against '${{ matrix.baseImage }}'"
         run: devcontainer features test --skip-scenarios -f ${{ matrix.features }} -i ${{ matrix.baseImage }} .
