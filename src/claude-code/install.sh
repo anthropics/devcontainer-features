@@ -95,6 +95,14 @@ install_claude_code() {
     if command -v claude >/dev/null; then
         echo "Claude Code CLI installed successfully!"
         claude --version
+
+        # Ensure correct permissions for auto-updates
+        local global_node_modules=$(npm root -g)
+        if [ -d "$global_node_modules/@anthropic-ai" ]; then
+            chmod -R g+rw "$global_node_modules/@anthropic-ai" \
+                || echo "WARNING: Could not set permissions on install directory"
+        fi
+
         return 0
     else
         echo "ERROR: Claude Code CLI installation failed!"
