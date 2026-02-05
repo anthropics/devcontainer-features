@@ -1,7 +1,7 @@
 {
     "name": "Claude Code CLI",
     "id": "claude-code",
-    "version": "1.0.5",
+    "version": "1.1.0",
     "description": "Installs the Claude Code CLI globally",
     "options": {},
     "documentationURL": "https://github.com/anthropics/devcontainer-features/tree/main/src/claude-code",
@@ -15,5 +15,13 @@
     },
     "installsAfter": [
         "ghcr.io/devcontainers/features/node"
-    ]
+    ],
+    "mounts": [
+        {
+            "source": "claude-code-config-${devcontainerId}",
+            "target": "/claude-config",
+            "type": "volume"
+        }
+    ],
+    "postStartCommand": "/usr/local/bin/link-claude-config"
 }

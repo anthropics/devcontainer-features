@@ -35,3 +35,12 @@ If your container already has Node.js installed (for example, a container based 
 
 When using with containers that have nvm pre-installed, you can use the Claude Code feature directly, and it will use the existing Node.js installation.
 
+## Persistent Claude configuration
+
+This feature automatically sets up persistent storage for your Claude configuration:
+
+- A volume is mounted at `/claude-config` that persists across container rebuilds
+- The feature automatically detects the logged-in user and creates a symlink from `~/.claude` to `/claude-config`
+- No configuration is required - it works out of the box
+- Your Claude authentication and settings will be preserved when the container is rebuilt
+

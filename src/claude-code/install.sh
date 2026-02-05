@@ -138,3 +138,14 @@ main() {
 
 # Execute main function
 main
+
+# Pre-create the volume mount point with correct ownership so that Docker
+# named volumes inherit the ownership on first use (no sudo needed later).
+if [ -n "${_REMOTE_USER:-}" ]; then
+    mkdir -p /claude-config
+    chown "$_REMOTE_USER:$_REMOTE_USER" /claude-config
+fi
+
+# Add the post-install script for persistent storage for Claude configuration
+install -d /usr/local/bin
+install -m 0755 ./link-claude-config.sh /usr/local/bin/link-claude-config
