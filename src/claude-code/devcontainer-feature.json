@@ -1,19 +1,14 @@
 {
-    "name": "Claude Code CLI",
-    "id": "claude-code",
-    "version": "1.0.5",
-    "description": "Installs the Claude Code CLI globally",
-    "options": {},
-    "documentationURL": "https://github.com/anthropics/devcontainer-features/tree/main/src/claude-code",
-    "licenseURL": "https://github.com/anthropics/devcontainer-features/blob/main/LICENSE",
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "anthropic.claude-code"
-            ]
-        }
-    },
-    "installsAfter": [
-        "ghcr.io/devcontainers/features/node"
-    ]
+  "name": "Claude Code CLI",
+  "id": "claude-code",
+  "version": "1.0.6",
+  "description": "Installs the Claude Code CLI globally",
+  "options": {},
+  "documentationURL": "https://github.com/anthropics/devcontainer-features/tree/main/src/claude-code",
+  "licenseURL": "https://github.com/anthropics/devcontainer-features/blob/main/LICENSE",
+  "customizations": {
+    "vscode": {
+      "extensions": ["anthropic.claude-code"]
+    }
+  }
 }

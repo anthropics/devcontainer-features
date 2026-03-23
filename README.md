@@ -17,10 +17,6 @@ To use this feature in your devcontainer, add it to your `devcontainer.json` fil
 }
 ```
 
-## Requirements
-
-The feature automatically depends on Node.js and will install it if not already present.
-
 ## Building and Testing
 
 You can build and test the feature using the [dev container CLI](https://github.com/devcontainers/cli):

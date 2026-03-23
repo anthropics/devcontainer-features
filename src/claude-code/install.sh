@@ -21,7 +21,7 @@ install_packages() {
     local pkg_manager="$1"
     shift
     local packages="$@"
-    
+
     case "$pkg_manager" in
         apt)
             apt-get update
@@ -38,84 +38,30 @@ install_packages() {
             return 1
             ;;
     esac
-    
+
     return 0
 }
 
-# Function to install Node.js
-install_nodejs() {
-    local pkg_manager="$1"
-    
-    echo "Installing Node.js using $pkg_manager..."
-    
-    case "$pkg_manager" in
-        apt)
-            # Debian/Ubuntu - install more recent Node.js LTS
-            install_packages apt "ca-certificates curl gnupg"
-            mkdir -p /etc/apt/keyrings
-            curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-            echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
-            apt-get update
-            apt-get install -y nodejs
-            ;;
-        apk)
-            # Alpine
-            install_packages apk "nodejs npm"
-            ;;
-        dnf)
-            # Fedora/RHEL
-            install_packages dnf "nodejs npm"
-            ;;
-        yum)
-            # CentOS/RHEL
-            curl -sL https://rpm.nodesource.com/setup_18.x | bash -
-            yum install -y nodejs
-            ;;
-        *)
-            echo "ERROR: Unsupported package manager for Node.js installation"
-            return 1
-            ;;
-    esac
-    
-    # Verify installation
-    if command -v node >/dev/null && command -v npm >/dev/null; then
-        echo "Successfully installed Node.js and npm"
-        return 0
-    else
-        echo "Failed to install Node.js and npm"
-        return 1
-    fi
-}
-
-# Function to install Claude Code CLI
+# Function to install Claude Code CLI using the native installer
 install_claude_code() {
     echo "Installing Claude Code CLI..."
-    npm install -g @anthropic-ai/claude-code
+    su - "$_REMOTE_USER" -c 'curl -fsSL https://claude.ai/install.sh | bash'
 
-    if command -v claude >/dev/null; then
+    # The native installer places the binary in ~/.local/bin (symlink to ~/.local/share/claude/).
+    # Copy the resolved binary to /usr/local/bin so it is available to all users.
+    REMOTE_USER_HOME=$(eval echo "~$_REMOTE_USER")
+    CLAUDE_LOCAL="$REMOTE_USER_HOME/.local/bin/claude"
+    if [ -e "$CLAUDE_LOCAL" ]; then
+        CLAUDE_REAL="$(readlink -f "$CLAUDE_LOCAL")"
+        cp "$CLAUDE_REAL" /usr/local/bin/claude
+        chmod +x /usr/local/bin/claude
         echo "Claude Code CLI installed successfully!"
-        claude --version
+        /usr/local/bin/claude --version
         return 0
     else
         echo "ERROR: Claude Code CLI installation failed!"
         return 1
     fi
-}
-
-# Print error message about requiring Node.js feature
-print_nodejs_requirement() {
-    cat <<EOF
-
-ERROR: Node.js and npm are required but could not be installed!
-Please add the Node.js feature to your devcontainer.json:
-
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {},
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
-  }
-
-EOF
-    exit 1
 }
 
 # Main script starts here
@@ -126,10 +72,19 @@ main() {
     PKG_MANAGER=$(detect_package_manager)
     echo "Detected package manager: $PKG_MANAGER"
 
-    # Try to install Node.js if it's not available
-    if ! command -v node >/dev/null || ! command -v npm >/dev/null; then
-        echo "Node.js or npm not found, attempting to install automatically..."
-        install_nodejs "$PKG_MANAGER" || print_nodejs_requirement
+    # Ensure curl and bash are available
+    MISSING_DEPS=""
+    command -v curl >/dev/null || MISSING_DEPS="$MISSING_DEPS curl"
+    command -v bash >/dev/null || MISSING_DEPS="$MISSING_DEPS bash"
+    if [ -n "$MISSING_DEPS" ]; then
+        echo "Installing missing dependencies:$MISSING_DEPS"
+        install_packages "$PKG_MANAGER" $MISSING_DEPS
+    fi
+
+    # Alpine requires additional dependencies for the native installer
+    if [ "$PKG_MANAGER" = "apk" ]; then
+        echo "Alpine detected, installing additional dependencies..."
+        install_packages apk libgcc libstdc++ ripgrep
     fi
 
     # Install Claude Code CLI
