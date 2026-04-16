@@ -118,6 +118,17 @@ EOF
     exit 1
 }
 
+# Set CLAUDE_CONFIG_DIR=/claude-config in shell profiles so all Claude data
+# (including .claude.json) is stored in the mounted volume at /claude-config.
+setup_persist_config() {
+    REMOTE_HOME=$(getent passwd "${_REMOTE_USER:-}" 2>/dev/null | cut -d: -f6 || echo "$HOME")
+    for profile in "$REMOTE_HOME/.bashrc" "$REMOTE_HOME/.profile" "$REMOTE_HOME/.zshrc" "$REMOTE_HOME/.bash_profile"; do
+        if [ -f "$profile" ] && ! grep -q "CLAUDE_CONFIG_DIR" "$profile"; then
+            echo 'export CLAUDE_CONFIG_DIR="/claude-config"' >> "$profile"
+        fi
+    done
+}
+
 # Main script starts here
 main() {
     echo "Activating feature 'claude-code'"
@@ -134,6 +145,9 @@ main() {
 
     # Install Claude Code CLI
     install_claude_code || exit 1
+
+    # Point CLAUDE_CONFIG_DIR at the mounted volume for persistent storage
+    setup_persist_config
 }
 
 # Execute main function

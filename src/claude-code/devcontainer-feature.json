@@ -1,9 +1,19 @@
 {
     "name": "Claude Code CLI",
     "id": "claude-code",
-    "version": "1.0.5",
+    "version": "1.1.0",
     "description": "Installs the Claude Code CLI globally",
     "options": {},
+    "mounts": [
+        {
+            "source": "claude-config-${devcontainerId}",
+            "target": "/claude-config",
+            "type": "volume"
+        }
+    ],
+    "postCreateCommand": {
+        "fix-claude-config-ownership": "sudo chown -R $(id -u):$(id -g) /claude-config || true"
+    },
     "documentationURL": "https://github.com/anthropics/devcontainer-features/tree/main/src/claude-code",
     "licenseURL": "https://github.com/anthropics/devcontainer-features/blob/main/LICENSE",
     "customizations": {
