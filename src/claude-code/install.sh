@@ -90,7 +90,14 @@ install_nodejs() {
 # Function to install Claude Code CLI
 install_claude_code() {
     echo "Installing Claude Code CLI..."
-    npm install -g @anthropic-ai/claude-code --allow-scripts=@anthropic-ai/claude-code
+    npm_version=$(npm --version)
+    npm_major_version=${npm_version%%.*}
+
+    if [ "$npm_major_version" -ge 12 ] 2>/dev/null; then
+        npm install -g @anthropic-ai/claude-code --allow-scripts=@anthropic-ai/claude-code
+    else
+        npm install -g @anthropic-ai/claude-code
+    fi
 
     if command -v claude >/dev/null; then
         echo "Claude Code CLI installed successfully!"
